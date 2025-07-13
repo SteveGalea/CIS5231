@@ -1,0 +1,2 @@
+conda create --name cis5231 python=3.10
+conda activate cis5231
