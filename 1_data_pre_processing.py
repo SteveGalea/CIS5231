@@ -7,6 +7,7 @@ from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer, SnowballStemmer
 from tqdm import tqdm
+from models.consts import MAX_VOCAB_SIZE, UNK_TOKEN
 import pickle
 tqdm.pandas()
 
@@ -18,8 +19,6 @@ nlp = spacy.load("en_core_web_sm")
 nltk.download('punkt_tab')
 
 STOPWORDS = set(stopwords.words("english"))
-MAX_VOCAB_SIZE = 10000
-UNK_TOKEN = "<UNK>"
 
 lemmatizer = WordNetLemmatizer()
 stemmer = SnowballStemmer('english')
