@@ -34,7 +34,7 @@ if __name__ == "__main__":
     batch_size = 256
     learning_rate = 0.01
     epochs = 50
-    window_size = 3
+    window_size = 4
 
     category = "sports"  # business
     suffix_category = f"{category}_"
@@ -64,7 +64,7 @@ if __name__ == "__main__":
 
     #model = torch.compile(model)
 
-    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=4)
+    dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True, num_workers=4) # use of minibatches
 
     # Loss, and optimizer
     criterion = nn.CrossEntropyLoss()
