@@ -31,10 +31,10 @@ if __name__ == "__main__":
     # Load DataFrame
     model_name = "skipgram"
     #  hyperparameters
-    batch_size = 32
-    learning_rate = 0.001
+    batch_size = 256
+    learning_rate = 0.01
     epochs = 50
-    window_size = 2
+    window_size = 3
 
     category = "sports"  # business
     suffix_category = f"{category}_"
@@ -91,10 +91,11 @@ if __name__ == "__main__":
         loss_history.append(avg_loss)  # log the average loss
         print(f"Epoch {epoch + 1}/{epochs}, Loss: {avg_loss:.4f}")
         # Save the trained model
-        if epoch % 10 == 0:
-            torch.save(model.state_dict(), f"{save_dir}/{export_file_name}_checkpoint_{epoch}e")
-            loss_df = pd.DataFrame({'epoch': range(1, epochs + 1), 'loss': loss_history})
-            loss_df.to_csv(f"{save_dir}/training_loss_log_{export_file_name}_checkpoint_{epoch}e.csv", index=False)
+        if (epoch + 1) % 10 == 0:
+            os.makedirs(f"{save_dir}/checkpoints/checkpoint_{epoch}e", exist_ok=True),
+            torch.save(model.state_dict(), f"{save_dir}/checkpoints/checkpoint_{epoch}e/checkpoint_{epoch}e_{export_file_name}")
+            loss_df = pd.DataFrame({'epoch': range(1, epoch + 2), 'loss': loss_history})
+            loss_df.to_csv(f"{save_dir}/checkpoints/checkpoint_{epoch}e/training_loss_log_checkpoint_{epoch}e_{export_file_name}.csv", index=False)
 
     torch.save(model.state_dict(), f"{save_dir}/{export_file_name}")
     loss_df = pd.DataFrame({'epoch': range(1, epochs + 1), 'loss': loss_history})
