@@ -29,7 +29,7 @@ if __name__ == "__main__":
     embedding_dim = 256
     device = torch.device("cpu")
     # Load DataFrame
-    model_name = "cbow"
+    model_name = "skipgram"
     #  hyperparameters
     batch_size = 256
     learning_rate = 0.01
