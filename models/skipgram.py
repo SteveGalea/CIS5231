@@ -10,7 +10,8 @@ import torch.nn.functional as F
 torch.set_num_threads(torch.get_num_threads())
 torch.backends.mkldnn.enabled = True
 
-#https://leshem-ido.medium.com/skip-gram-word2vec-algorithm-explained-85cd67a45ffa
+# Boilerplate code from ChatGPT, but later adapted to incorporate code from:
+# https://leshem-ido.medium.com/skip-gram-word2vec-algorithm-explained-85cd67a45ffa
 class SkipGramModel(WordEmbeddingModel):
     def __init__(self, vocab_size, embedding_dim):
         super(SkipGramModel, self).__init__(vocab_size, embedding_dim)
@@ -24,7 +25,8 @@ class SkipGramModel(WordEmbeddingModel):
         log_probs = F.log_softmax(out, dim=1)
         return log_probs
 
-
+# Boilerplate code from ChatGPT, but later adapted to incorporate code from
+# https://leshem-ido.medium.com/skip-gram-word2vec-algorithm-explained-85cd67a45ffa
 class SkipGramDataset(Dataset):
     def __init__(self, data, vocab):
         self.data = data
@@ -39,7 +41,7 @@ class SkipGramDataset(Dataset):
         context_idx = torch.tensor(self.vocab.get(context, self.vocab[UNK_TOKEN]), dtype=torch.long)
         return center_idx, context_idx
 
-
+#https://leshem-ido.medium.com/skip-gram-word2vec-algorithm-explained-85cd67a45ffa
 def generate_skipgram_data(tokens_list, window_size=2):
     data = []
     for tokens in tokens_list:

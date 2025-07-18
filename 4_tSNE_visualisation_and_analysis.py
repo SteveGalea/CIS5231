@@ -27,11 +27,11 @@ set_seed(42)
 device = torch.device("cpu")
 
 # set params
-model_name = "skipgram" # "skipgram"
+model_name = "cbow" # "skipgram"
 batch_size = 256
-lr = "0.05"
-epochs = "10"
-window = "10"
+lr = "0.01"
+epochs = "50"
+window = "3"
 filepath = f"models/sports/{model_name}/{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w_files/"
 filename = f"{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w.pth"
 

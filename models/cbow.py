@@ -9,8 +9,8 @@ import torch.nn.functional as F
 torch.set_num_threads(torch.get_num_threads())
 torch.backends.mkldnn.enabled = True  # For optimized CPU kernels
 
-
-# adapted from https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
+# Boilerplate code from ChatGPT, but later adapted to incorporate code from
+# https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
 class CBOWModel(WordEmbeddingModel):
     def __init__(self, vocab_size, embedding_dim):
         super(CBOWModel, self).__init__(vocab_size, embedding_dim)
@@ -28,7 +28,8 @@ class CBOWModel(WordEmbeddingModel):
 
 
 # Dataset class for CBOW
-# adapted from https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
+# Boilerplate code from ChatGPT, but later adapted to incorporate code from:
+# https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
 class CBOWDataset(Dataset):
     def __init__(self, data, vocab):
         self.data = data
