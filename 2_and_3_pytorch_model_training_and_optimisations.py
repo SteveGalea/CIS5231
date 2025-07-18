@@ -29,12 +29,12 @@ if __name__ == "__main__":
     embedding_dim = 256
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     # load dataframe
-    model_name = "cbow"
+    model_name = "skipgram"
     # hyperparameters
-    batch_size = 32
-    learning_rate = 0.001
-    epochs = 3
-    window_size = 2
+    batch_size = 256
+    learning_rate = 0.01
+    epochs = 5
+    window_size = 5
 
     category = "sports"  # business
     suffix_category = f"{category}_"
@@ -77,6 +77,7 @@ if __name__ == "__main__":
 
         # adapted from https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
         # adapted training loop from both https://leshem-ido.medium.com/skip-gram-word2vec-algorithm-explained-85cd67a45ffa and https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
+        # also optimised by ChatGPT
         for context_idxs, target_idx in dataloader:
             context_idxs = context_idxs.to(device)
             target_idx = target_idx.to(device)

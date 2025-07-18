@@ -8,6 +8,7 @@ from sklearn.manifold import TSNE
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+import os
 
 # Chat GPT suggested:
 torch.set_num_threads(torch.get_num_threads())
@@ -26,15 +27,30 @@ set_seed(42)
 device = torch.device("cpu")
 
 # set params
-lr = "0.001"
-epochs = "100"
-window = "2"
-batch_size = 128
-model_name = "cbow"  # "skipgram"
+model_name = "skipgram" # "skipgram"
+batch_size = 256
+lr = "0.05"
+epochs = "10"
+window = "10"
 filepath = f"models/sports/{model_name}/{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w_files/"
 filename = f"{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w.pth"
 
 embedding_dim = 256
+
+convergence_visual_path = f"{filepath}loss_plot_{filename}.png"
+if os.path.exists(convergence_visual_path) == False:
+    df = pd.read_csv(f"{filepath}training_loss_log_{filename}.csv")
+    loss = df["loss"].astype(float).tolist()
+    plt.plot(range(1, int(epochs) + 1), loss, marker='o')
+    plt.title("Training Loss Over Epochs")
+    plt.xlabel("Epoch")
+    plt.ylabel("Average Loss")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(convergence_visual_path)
+    plt.show()
+
+    print(f"Model saved to {convergence_visual_path}")
 
 # load data
 with open("Data/vocab_sports_dict.pkl", "rb") as f:
@@ -53,7 +69,7 @@ print(model.eval())
 embeddings = model.embeddings.weight.data.cpu().numpy()
 
 # dimensionality reduction:
-# use t-SNE to reduce the high-dimensional embeddings to 2D space.
+# use t-SNE to reduce the high-dimensional embeddings to 2D space. https://scikit-learn.org/stable/modules/generated/sklearn.manifold.TSNE.html
 tsne = TSNE(n_components=2, random_state=42, perplexity=30, max_iter=1000)
 embeddings_2d = tsne.fit_transform(embeddings)
 
@@ -77,8 +93,8 @@ for i in label_indices:
     word = idx_to_word.get(i, UNK_TOKEN)
     plt.text(x + 0.002, y + 0.002, word, fontsize=8)
 
-plt.xlim(-8, 8)
-plt.ylim(-8, 8)
+# plt.xlim(-8, 8)
+# plt.ylim(-8, 8)
 
 plt.title("t-SNE Visualization of Word Embeddings")
 plt.grid(True)
