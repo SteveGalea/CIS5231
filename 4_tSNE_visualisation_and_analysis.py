@@ -31,7 +31,7 @@ model_name = "cbow" # "skipgram"
 batch_size = 256
 lr = "0.01"
 epochs = "50"
-window = "3"
+window = "2"
 filepath = f"models/sports/{model_name}/{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w_files/"
 filename = f"{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w.pth"
 
