@@ -1,14 +1,15 @@
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
 import random
-import pandas as pd
 import pickle
-import numpy as np
-import matplotlib.pyplot as plt
 from models.consts import UNK_TOKEN
 from models.cbow import CBOWModel
 from models.skipgram import SkipGramModel
+
+from sklearn.manifold import TSNE
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
 
 def set_seed(seed=42):
     random.seed(seed)
@@ -17,26 +18,24 @@ def set_seed(seed=42):
     torch.backends.cudnn.deterministic = True
     torch.backends.cudnn.benchmark = False
 
+
 set_seed(42)
 torch.set_num_threads(torch.get_num_threads())
 torch.backends.mkldnn.enabled = True
 device = torch.device("cpu")
-lr = "0.001"
-epochs = "100"
-window = "2"
+lr = "0.01"
+epochs = "50"
+window = "10"
 batch_size = 256
-model_name = "skipgram" #"cbow"
+model_name = "cbow"  # "cbow"
 filepath = f"models/sports/{model_name}/{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w_files/"
 filename = f"{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w.pth"
 
-embedding_dim = 256      # or the dimension you used in training
+embedding_dim = 256  # or the dimension you used in training
 # Load vocabulary
 
 with open("Data/vocab_sports_dict.pkl", "rb") as f:
     vocab = pickle.load(f)
-
-
-# Re-create the model with same dimensions
 
 # Prepare data and Model
 if model_name == "cbow":
@@ -45,26 +44,22 @@ else:
     model = SkipGramModel(len(vocab), embedding_dim).to(device)
 
 # Load saved state dict
-model.load_state_dict(torch.load(filepath+filename))
+model.load_state_dict(torch.load(filepath + filename, map_location=torch.device('cpu')))
 print(model.eval())
 
 # Get embedding weights: shape (vocab_size, embedding_dim)
 embeddings = model.embeddings.weight.data.cpu().numpy()
-
-from sklearn.manifold import TSNE
-import numpy as np
 
 # Reduce dimensionality to 2D
 
 tsne = TSNE(n_components=2, random_state=42, perplexity=30, max_iter=1000)
 
 embeddings_2d = tsne.fit_transform(embeddings)
-import matplotlib.pyplot as plt
 
 # Invert vocab dictionary to get word from index
 idx_to_word = {idx: word for word, idx in vocab.items()}
 
-plt.figure(figsize=(14, 10))
+plt.figure(figsize=(14, 14))
 
 # Plot only top N words to avoid
 n = 30
@@ -83,39 +78,49 @@ for i in label_indices:
     plt.text(x + 0.002, y + 0.002, word, fontsize=8)
 
 # Zoom into a specific region (customize these values)
-# plt.xlim(-1, 10)   # adjust x-axis range
-# plt.ylim(-1, 10)   # adjust y-axis range
+plt.xlim(-8, 8)   # adjust x-axis range
+plt.ylim(-8, 8)   # adjust y-axis range
 
 plt.title("t-SNE Visualization of Word Embeddings")
 plt.grid(True)
 plt.tight_layout()
 plt.savefig(f"{filepath}top_{N}_tsne_word_embeddings_{filename}.png")
-#plt.show()
 
-from sklearn.cluster import KMeans
-num_clusters = 30  # adjust as you like
-kmeans = KMeans(n_clusters=num_clusters, random_state=42)
-cluster_labels = kmeans.fit_predict(embeddings)
+# Define semantic groups
+categories = {
+    'Gender': ["man", "woman", "boy", "girl", "male", "female", "men", "women", "womens"],
+    'Royalty': ["king", "queen", "man", "woman", "prince", "princess"],
+    'Business': ["businessman", "business", "businessmenin"],
+    'Sports': ["football", "soccer", "american", "cricket", "india", "basketball","america","states", "olympics", "major", "tournament", "handball"],
+    'Country': ["america", "american", "british", "english", "england", "united", "states", "ozil", "mueller", "germany", "germans", "turkey", "bonnucci", "armbonucci","italy"],
+    'Colors': ["yellow", "gold", "red", "green", "blue", "angry"],
+    'Position': ["silver", "second", "gold", "first", "third", "bronze", "win", "lose"]
+}
 
-# Find the closest word index to each cluster center
-center_indices = []
-for center in kmeans.cluster_centers_:
-    # Compute distances from center to all embeddings
-    distances = np.linalg.norm(embeddings - center, axis=1)
-    closest_idx = np.argmin(distances)
-    center_indices.append(closest_idx)
+for key, word_list in categories.items():
+    words_subset = [word for word in word_list if word in vocab]
+    indices = [vocab[word] for word in words_subset]
+    coords = embeddings_2d[indices]
+    plt.figure(figsize=(10, 8))
+    for i, word in enumerate(words_subset):
+        x, y = coords[i]
+        plt.scatter(x, y, color='blue')
+        plt.text(x + 0.02, y + 0.02, word, fontsize=10)
 
-# Plot only the cluster centers in 2D t-SNE space
-plt.figure(figsize=(14, 10))
+    plt.title("t-SNE Plot of Selected Word Embeddings")
+    plt.grid(True)
+    plt.tight_layout()
+    plt.savefig(f"{filepath}{key}_subset_words_tsne_{filename}.png")
 
-for i in center_indices:
-    x, y = embeddings_2d[i, 0], embeddings_2d[i, 1]
+data = []
+for i in range(len(embeddings_2d)):
     word = idx_to_word.get(i, UNK_TOKEN)
-    plt.scatter(x, y, s=50, marker='x', color='red')
-    plt.text(x + 0.002, y + 0.002, word, fontsize=12, fontweight='bold', color='black')
+    x, y = embeddings_2d[i]
+    data.append((word, x, y))
 
-plt.title(f"t-SNE Visualization of {num_clusters} Cluster Center Words")
-plt.grid(True)
-plt.tight_layout()
-plt.savefig(f"{filepath}cluster_centers_{num_clusters}_tsne_{filename}.png")
-plt.show()
+# Create DataFrame
+df = pd.DataFrame(data, columns=['word', 'x', 'y'])
+
+# Save to CSV
+csv_path = f"{filepath}tsne_embeddings_{filename}.csv"
+df.to_csv(csv_path, index=False)

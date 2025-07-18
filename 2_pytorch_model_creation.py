@@ -31,10 +31,10 @@ if __name__ == "__main__":
     # Load DataFrame
     model_name = "cbow"
     #  hyperparameters
-    batch_size = 256
-    learning_rate = 0.01
-    epochs = 50
-    window_size = 4
+    batch_size = 32
+    learning_rate = 0.001
+    epochs = 25
+    window_size = 2
 
     category = "sports"  # business
     suffix_category = f"{category}_"
