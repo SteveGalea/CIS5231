@@ -23,10 +23,10 @@ set_seed(42)
 torch.set_num_threads(torch.get_num_threads())
 torch.backends.mkldnn.enabled = True
 device = torch.device("cpu")
-lr = "0.01"
-epochs = "50"
-window = "10"
-batch_size = 256
+lr = "0.001"
+epochs = "100"
+window = "2"
+batch_size = 128
 model_name = "cbow"  # "cbow"
 filepath = f"models/sports/{model_name}/{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w_files/"
 filename = f"{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w.pth"
