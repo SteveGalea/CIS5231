@@ -75,6 +75,7 @@ if __name__ == "__main__":
     for epoch in range(epochs):
         total_loss = 0
         model.train()
+        # adapted training loop from both https://leshem-ido.medium.com/skip-gram-word2vec-algorithm-explained-85cd67a45ffa and https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
         for context_idxs, target_idx in dataloader:
             context_idxs = context_idxs.to(device)
             target_idx = target_idx.to(device)

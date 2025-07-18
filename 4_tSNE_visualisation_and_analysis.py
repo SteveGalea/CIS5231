@@ -90,8 +90,8 @@ plt.savefig(f"{filepath}top_{N}_tsne_word_embeddings_{filename}.png")
 categories = {
     'Gender': ["man", "woman", "boy", "girl", "male", "female", "men", "women", "womens"],
     'Royalty': ["king", "queen", "man", "woman", "prince", "princess"],
-    'Business': ["businessman", "business", "businessmenin"],
-    'Sports': ["football", "soccer", "american", "cricket", "india", "basketball","america","states", "olympics", "major", "tournament", "handball"],
+    'Business': ["businessman", "man", "business", "businessmenin"],
+    'Sports': ["foot","ball", "football", "soccer", "american", "cricket", "india", "basketball","america","states", "olympics", "major", "tournament", "handball"],
     'Country': ["america", "american", "british", "english", "england", "united", "states", "ozil", "mueller", "germany", "germans", "turkey", "bonnucci", "armbonucci","italy"],
     'Colors': ["yellow", "gold", "red", "green", "blue", "angry"],
     'Position': ["silver", "second", "gold", "first", "third", "bronze", "win", "lose"]

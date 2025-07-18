@@ -24,7 +24,7 @@ class CBOWModel(WordEmbeddingModel):
         return log_probs
 
 
-# Custom Dataset class for CBOW
+# Dataset class for CBOW
 class CBOWDataset(Dataset):
     def __init__(self, data, vocab):
         self.data = data
