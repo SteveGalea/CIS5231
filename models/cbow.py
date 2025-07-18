@@ -18,8 +18,10 @@ class CBOWModel(WordEmbeddingModel):
 
     def forward(self, context_idxs):
         # context_idxs: (batch_size, context_window*2)
-        embeds = self.embeddings(context_idxs)  # shape: (batch_size, context_size, emb_dim)
-        context_embed = embeds.mean(dim=1)  # average over context
+        # shape: (batch_size, context_size, emb_dim)
+        embeds = self.embeddings(context_idxs)
+        # average over context
+        context_embed = embeds.mean(dim=1)
         out = self.linear(context_embed)
         log_probs = F.log_softmax(out, dim=1)
         return log_probs

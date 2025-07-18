@@ -33,6 +33,7 @@ df = df.dropna(subset=['Article'])
 
 
 def clean_text(text):
+    # https://www.geeksforgeeks.org/machine-learning/python-efficient-text-data-cleaning/
     # text normalisation (lower-case, etc)
     text = text.lower()
     # ignore non-ascii characters

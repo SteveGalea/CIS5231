@@ -18,7 +18,8 @@ class SkipGramModel(WordEmbeddingModel):
 
     def forward(self, center_idxs):
         # center_idxs: (batch_size)
-        embeds = self.embeddings(center_idxs)  # shape: (batch_size, emb_dim)
+        # shape: (batch_size, emb_dim)
+        embeds = self.embeddings(center_idxs)
         out = self.linear(embeds)
         log_probs = F.log_softmax(out, dim=1)
         return log_probs
