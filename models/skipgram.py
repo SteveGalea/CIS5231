@@ -6,8 +6,10 @@ from models.consts import UNK_TOKEN
 from .word_embedding import WordEmbeddingModel
 import torch.nn.functional as F
 
+# Chat GPT suggested:
 torch.set_num_threads(torch.get_num_threads())
 torch.backends.mkldnn.enabled = True
+
 #https://leshem-ido.medium.com/skip-gram-word2vec-algorithm-explained-85cd67a45ffa
 class SkipGramModel(WordEmbeddingModel):
     def __init__(self, vocab_size, embedding_dim):

@@ -5,12 +5,13 @@ from torch.utils.data import Dataset
 from .consts import UNK_TOKEN
 import torch.nn.functional as F
 
+# Chat GPT suggested:
 torch.set_num_threads(torch.get_num_threads())
 torch.backends.mkldnn.enabled = True  # For optimized CPU kernels
 
 
+# adapted from https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
 class CBOWModel(WordEmbeddingModel):
-    # adapted from https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
     def __init__(self, vocab_size, embedding_dim):
         super(CBOWModel, self).__init__(vocab_size, embedding_dim)
         self.linear = nn.Linear(embedding_dim, vocab_size)
@@ -25,6 +26,7 @@ class CBOWModel(WordEmbeddingModel):
 
 
 # Dataset class for CBOW
+# adapted from https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
 class CBOWDataset(Dataset):
     def __init__(self, data, vocab):
         self.data = data
@@ -40,6 +42,7 @@ class CBOWDataset(Dataset):
         return context_idxs, target_idx
 
 
+# altered from https://github.com/FraLotito/pytorch-continuous-bag-of-words/blob/master/cbow.py
 def generate_cbow_data(tokens_list, window_size=2):
     data = []
     for tokens in tokens_list:

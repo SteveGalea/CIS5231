@@ -17,14 +17,13 @@ nltk.download('stopwords')
 spacy.cli.download("en_core_web_sm")
 nlp = spacy.load("en_core_web_sm")
 nltk.download('punkt_tab')
-
 STOPWORDS = set(stopwords.words("english"))
 
 lemmatizer = WordNetLemmatizer()
 stemmer = SnowballStemmer('english')
 nlp = spacy.load("en_core_web_sm", disable=["parser", "ner"])
-# Task 1: Dataset Acquisition and Pre-Processing
 
+# Task 1: Dataset Acquisition and Pre-Processing
 # data importing & initial filtering by "business"/"sports" NewsType
 news_type = "sports"
 file_path = "Data/Articles.csv"
