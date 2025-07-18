@@ -28,10 +28,10 @@ device = torch.device("cpu")
 
 # set params
 model_name = "cbow" # "skipgram"
-batch_size = 256
+batch_size = 64
 lr = "0.01"
 epochs = "50"
-window = "2"
+window = "5"
 filepath = f"models/sports/{model_name}/{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w_files/"
 filename = f"{model_name}_model_{batch_size}b_{lr}l_{epochs}e_{window}w.pth"
 
@@ -93,8 +93,8 @@ for i in label_indices:
     word = idx_to_word.get(i, UNK_TOKEN)
     plt.text(x + 0.002, y + 0.002, word, fontsize=8)
 
-# plt.xlim(-8, 8)
-# plt.ylim(-8, 8)
+# plt.xlim(-9, 9)
+# plt.ylim(-9, 9)
 
 plt.title("t-SNE Visualization of Word Embeddings")
 plt.grid(True)
